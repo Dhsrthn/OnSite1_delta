@@ -83,7 +83,7 @@ class fly {
     }
     else {
       this.playerImg=deadImg
-      this.y += this.speed * 2
+      this.y += 6
       if (this.y - this.radius > this.windowHeight) {
         this.new = true
       }
@@ -203,3 +203,20 @@ function generateRandom() {
   let yh = window.innerHeight
   return [Math.random() * (xw - 2 * radius) + radius, Math.random() * (yh - 2 * radius) + radius]
 }
+
+
+//fly swatter
+
+// const cursorRounded = document.querySelector('swatter');
+
+
+// const moveCursor = (e)=> {
+//   const mouseY = e.clientY;
+//   const mouseX = e.clientX;
+   
+//   cursorRounded.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+  
+ 
+// }
+
+// window.addEventListener('mousemove', moveCursor)
