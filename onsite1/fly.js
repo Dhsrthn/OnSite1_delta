@@ -36,10 +36,10 @@ const backgroundImg = document.createElement('img')
 backgroundImg.src = 'assets/background2.jpg'
 
 const leftImg = document.createElement('img')
-leftImg.src = 'assets/left.png'
+leftImg.src = 'assets/spriteLeft.png'
 
 const rightImg = document.createElement('img')
-rightImg.src = 'assets/right.png'
+rightImg.src = 'assets/spriteRight.png'
 
 const deadImg = document.createElement('img')
 deadImg.src = 'assets/dead.png'
@@ -56,16 +56,29 @@ class fly {
     this.start = true
     this.radius = radius
     this.windowHeight = h
+    this.spriteWidth=240
+    this.n=0
+    this.frameDelay = 100;  // Delay between frames in milliseconds
+    this.lastFrameTime = performance.now(); // Store the initial timestamp
+  }
 
+  updateFrame() {
+    const currentTime = performance.now();
+    const elapsedTime = currentTime - this.lastFrameTime;
+    console.log(elapsedTime)
+    if (elapsedTime >= this.frameDelay) {
+      this.n++;
+      if (this.n > 6) {
+        this.n = 0;
+      }
+
+      this.lastFrameTime = currentTime;
+    }
   }
 
   //methods
   draw() {
     ctx.beginPath()
-    // ctx.arc(this.x,this.y,this.radius,0,2*Math.PI)
-    // ctx.fillStyle='white'
-    // ctx.fill()
-
     if (this.start) {
       this.playerImg = rightImg
       this.new = false
@@ -74,11 +87,17 @@ class fly {
       this.start = false
     }
     ctx.save()
+    
     ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
-    ctx.drawImage(this.playerImg, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2)
+    if(!this.dead){
+      ctx.drawImage(this.playerImg,this.n*this.spriteWidth,0,this.spriteWidth,this.spriteWidth,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2)
+    }else{
+      ctx.drawImage(this.playerImg, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2)
+    }
     ctx.closePath()
     ctx.restore()
     if (!this.dead) {
+      this.updateFrame()
       this.move()
     }
     else {
@@ -137,7 +156,7 @@ function main() {
     ctx.drawImage(backgroundImg, -10, -10, width+10, height+10);
     ctx.font=`${window.innerWidth/30}px Verdana`
     ctx.fillStyle = 'white'
-    ctx.fillText(`score ${score}`, 50, 80)
+    ctx.fillText(`Score ${score}`,6* window.innerWidth/14, 80,window.innerWidth/7)
 
     if (insectArray[0]) {
       insectArray[0].draw()
@@ -157,15 +176,7 @@ window.requestAnimationFrame(main)
 
 
 function gameLogic() {
-  // if(checkDeath){
-  //   insectArray.pop()
-  //   insectArray.push(new fly())
-  // }
   checkDeath()
-}
-
-function gamePretty() {
-
 }
 
 function getCoord(e) {
@@ -176,15 +187,13 @@ function getCoord(e) {
 
 function checkDeath() {
   if (clicked) {
-    console.log('clicked')
-
     if ((Math.sqrt((clickX - insectArray[0].x) ** 2 + (clickY - insectArray[0].y) ** 2)) < insectArray[0].radius) {
       insectArray[0].dead = true
+      score++
     }
     clicked = false
   }
   if (insectArray[0].new) {
-    score++
     insectArray.pop()
     let array = generateRandom()
     insectArray.push(new fly(array[0], array[1], 5+ Math.random()*5, radius, window.innerHeight))
@@ -193,9 +202,9 @@ function checkDeath() {
 }
 
 // let xw=window.innerWidth
-//     let yh=window.innerHeight
-//     this.targetx=Math.random()*(xw-2*this.radius)+this.radius
-//     this.targety=Math.random() * (yh-2*this.radius)+this.radius
+// let yh=window.innerHeight
+// this.targetx=Math.random()*(xw-2*this.radius)+this.radius
+// this.targety=Math.random() * (yh-2*this.radius)+this.radius
 
 
 function generateRandom() {
@@ -203,20 +212,3 @@ function generateRandom() {
   let yh = window.innerHeight
   return [Math.random() * (xw - 2 * radius) + radius, Math.random() * (yh - 2 * radius) + radius]
 }
-
-
-//fly swatter
-
-// const cursorRounded = document.querySelector('swatter');
-
-
-// const moveCursor = (e)=> {
-//   const mouseY = e.clientY;
-//   const mouseX = e.clientX;
-   
-//   cursorRounded.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-  
- 
-// }
-
-// window.addEventListener('mousemove', moveCursor)
