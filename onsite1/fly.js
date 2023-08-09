@@ -1,5 +1,3 @@
-
-
 let can, x, y
 window.onload = function () {
   can = document.getElementById("backgroundcanvas")
@@ -17,7 +15,6 @@ function resizeCanvas(canvas) {
 
 
 //game variables
-
 let backCanvas = document.getElementById("backgroundcanvas")
 var ctx = backCanvas.getContext("2d")
 let pause = false;
@@ -31,10 +28,6 @@ let radius = window.innerWidth / 25
 
 
 //game objects
-
-const backgroundImg = document.createElement('img')
-backgroundImg.src = 'assets/background2.jpg'
-
 const leftImg = document.createElement('img')
 leftImg.src = 'assets/spriteLeft.png'
 
@@ -43,9 +36,6 @@ rightImg.src = 'assets/spriteRight.png'
 
 const deadImg = document.createElement('img')
 deadImg.src = 'assets/dead.png'
-
-const swatter = document.createElement('img')
-swatter.src = 'assets/swatter.png'
 
 
 class fly {
@@ -58,25 +48,25 @@ class fly {
     this.windowHeight = h
     this.spriteWidth=240
     this.n=0
-    this.frameDelay = 100;  // Delay between frames in milliseconds
-    this.lastFrameTime = performance.now(); // Store the initial timestamp
+    this.frameDelay = 100;   
+    this.lastFrameTime = performance.now(); 
   }
 
+ //methods
   updateFrame() {
-    const currentTime = performance.now();
-    const elapsedTime = currentTime - this.lastFrameTime;
-    console.log(elapsedTime)
+    const currentTime = performance.now()
+    const elapsedTime = currentTime - this.lastFrameTime
     if (elapsedTime >= this.frameDelay) {
       this.n++;
       if (this.n > 6) {
         this.n = 0;
       }
 
-      this.lastFrameTime = currentTime;
+      this.lastFrameTime = currentTime
     }
   }
 
-  //methods
+  
   draw() {
     ctx.beginPath()
     if (this.start) {
@@ -145,7 +135,7 @@ let score = 0
 function main() {
   if (start) {
     let array = generateRandom()
-    insectArray.push(new fly(array[0], array[1], 5, radius, window.innerHeight))
+    insectArray.push(new fly(array[0], array[1], window.innerWidth/360, radius, window.innerHeight))
     start = false
   }
   if (!pause) {
@@ -153,7 +143,7 @@ function main() {
     window.addEventListener('mousedown', getCoord)
     let height = window.innerHeight
     let width = window.innerWidth
-    ctx.drawImage(backgroundImg, -10, -10, width+10, height+10);
+    ctx.clearRect(0,0,width,height)
     ctx.font=`${window.innerWidth/30}px Verdana`
     ctx.fillStyle = 'white'
     ctx.fillText(`Score ${score}`,6* window.innerWidth/14, 80,window.innerWidth/7)
@@ -161,23 +151,13 @@ function main() {
     if (insectArray[0]) {
       insectArray[0].draw()
     }
-    gameLogic()
-
-  } else {
-
-  }
-
-  //gamelogic
-  //gamepretty
-
+    checkDeath()
+  } 
 }
 
 window.requestAnimationFrame(main)
+window.addEventListener('keydown', pausegame)
 
-
-function gameLogic() {
-  checkDeath()
-}
 
 function getCoord(e) {
   clickX = e.clientX
@@ -196,7 +176,8 @@ function checkDeath() {
   if (insectArray[0].new) {
     insectArray.pop()
     let array = generateRandom()
-    insectArray.push(new fly(array[0], array[1], 5+ Math.random()*5, radius, window.innerHeight))
+    let factor=window.innerWidth/360
+    insectArray.push(new fly(array[0], array[1], factor+ Math.random()*factor , radius, window.innerHeight))
 
   }
 }
@@ -211,4 +192,32 @@ function generateRandom() {
   let xw = window.innerWidth
   let yh = window.innerHeight
   return [Math.random() * (xw - 2 * radius) + radius, Math.random() * (yh - 2 * radius) + radius]
+}
+
+function pausegame(){
+  if(pause){
+    playstart()
+  }else(
+    pausestart()
+  )
+}
+
+function playstart(){
+  if(pause){
+    pause=false
+    main()
+  }
+}
+
+function pausestart(){
+  if (!pause) {
+    pause=true
+    cancelAnimationFrame(request)
+    window.removeEventListener('mousedown', getCoord)
+    pause = true
+    ctx.fillStyle='rgba(128,128,128,0.5)'
+    ctx.fillRect(0,0,window.innerWidth,window.innerHeight)
+    ctx.fillStyle='black'
+    ctx.fillText('Pause',5* window.innerWidth/12,window.innerHeight/3,window.innerWidth/6)
+  }
 }
