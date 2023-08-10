@@ -48,7 +48,7 @@ class fly {
     this.windowHeight = h
     this.spriteWidth=240
     this.n=0
-    this.frameDelay = 100;   
+    this.frameDelay = 700/speed;   
     this.lastFrameTime = performance.now(); 
   }
 
