@@ -140,7 +140,15 @@ function main() {
   }
   if (!pause) {
     request = requestAnimationFrame(main)
-    window.addEventListener('mousedown', getCoord)
+    if(!timeout){
+      window.addEventListener('mousedown', getCoord)
+
+    }
+    else{
+      setTimeout(()=>{
+      window.addEventListener('mousedown', getCoord)
+      },1500)
+    }
     let height = window.innerHeight
     let width = window.innerWidth
     ctx.clearRect(0,0,width,height)
@@ -209,8 +217,11 @@ function playstart(){
   }
 }
 
+let timeout=false
+
 function pausestart(){
   if (!pause) {
+    timeout=true
     pause=true
     cancelAnimationFrame(request)
     window.removeEventListener('mousedown', getCoord)
