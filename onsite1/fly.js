@@ -142,9 +142,9 @@ function main() {
     request = requestAnimationFrame(main)
     if(!timeout){
       window.addEventListener('mousedown', getCoord)
-
     }
     else{
+      timeout=false
       setTimeout(()=>{
       window.addEventListener('mousedown', getCoord)
       },1500)
