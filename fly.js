@@ -37,6 +37,15 @@ rightImg.src = 'assets/spriteRight.png'
 const deadImg = document.createElement('img')
 deadImg.src = 'assets/dead.png'
 
+const bushImg=document.createElement('img')
+bushImg.src='assets/bush.png'
+
+const GroundBushImg=document.createElement('img')
+GroundBushImg.src='assets/bush2.png'
+
+const grassImg=document.createElement('img')
+grassImg.src='assets/grass.png'
+
 
 class fly {
   constructor(x, y, speed, radius, h) {
@@ -92,7 +101,7 @@ class fly {
     }
     else {
       this.playerImg=deadImg
-      this.y += 6
+      this.y += 8
       if (this.y - this.radius > this.windowHeight) {
         this.new = true
       }
@@ -156,10 +165,23 @@ function main() {
     ctx.fillStyle = 'white'
     ctx.fillText(`Score ${score}`,6* window.innerWidth/14, 80,window.innerWidth/7)
 
-    if (insectArray[0]) {
-      insectArray[0].draw()
+    if (insectArray.length>0) {
+      for(insect of insectArray){
+        insect.draw()
+      }
     }
+
+    ctx.beginPath()
+    ctx.arc(window.innerWidth,window.innerHeight/2,window.innerHeight/5,Math.PI/2,(3*Math.PI)/2)
+    ctx.drawImage(bushImg,window.innerWidth-window.innerHeight/5,3*window.innerHeight/10,2*window.innerHeight/5,2*window.innerHeight/5)
+    ctx.closePath()
+
+    ctx.beginPath()
+    ctx.arc(0,window.innerHeight/1.2,window.innerHeight/5,(3*Math.PI)/2,Math.PI/2)
+    ctx.drawImage(bushImg,0-window.innerHeight/5,(window.innerHeight/1.2)-(window.innerHeight/5),2*window.innerHeight/5,2*window.innerHeight/5)
+    ctx.closePath()
     checkDeath()
+    
   } 
 }
 
