@@ -40,12 +40,6 @@ deadImg.src = 'assets/dead.png'
 const bushImg=document.createElement('img')
 bushImg.src='assets/bush.png'
 
-const GroundBushImg=document.createElement('img')
-GroundBushImg.src='assets/bush2.png'
-
-const grassImg=document.createElement('img')
-grassImg.src='assets/grass.png'
-
 
 class fly {
   constructor(x, y, speed, radius, h) {
