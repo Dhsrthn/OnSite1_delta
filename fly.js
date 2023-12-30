@@ -239,7 +239,6 @@ function getCoord(e) {
 }
 
 function checkDeath() {
-  console.log(rounds, afterRounds);
   if (clicked) {
     for (let i = 0; i < insectArray.length; i++) {
       if (
@@ -250,6 +249,16 @@ function checkDeath() {
         insectArray[i].dead = true;
         score++;
       }
+      else if (
+        Math.sqrt(
+          (clickX - insectArray[i].x) ** 2 + (clickY - insectArray[i].y) ** 2
+        ) < 3* insectArray[i].radius
+      ) {
+        if(Math.random()>0.5){
+          insectArray[i].genRandomLoc();
+        }
+      }
+
     }
     clicked = false;
   }
@@ -271,14 +280,21 @@ function checkDeath() {
     }
 
     for (let i = 0; i < noActive; i++) {
+      console.log(noActive)
       let array = generateRandom();
       let factor = window.innerWidth / 360;
+      let radiusFactor;
+      if(Math.random()>0.5){
+        radiusFactor=1;
+      }else{
+        radiusFactor = (1 + ((noActive-1)/10))
+      }
       insectArray.push(
         new fly(
           array[0],
           array[1],
-          factor + Math.random() * factor,
-          radius,
+          factor + Math.random() * factor + (score/10),
+          radius/radiusFactor,
           window.innerHeight
         )
       );
