@@ -225,7 +225,7 @@ function main() {
       (2 * window.innerHeight) / 5
     );
     ctx.closePath();
-    checkDeath();
+    checkConditions();
   }
 }
 
@@ -238,7 +238,7 @@ function getCoord(e) {
   clicked = true;
 }
 
-function checkDeath() {
+function checkConditions() {
   if (clicked) {
     for (let i = 0; i < insectArray.length; i++) {
       if (
